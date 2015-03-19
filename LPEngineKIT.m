@@ -291,7 +291,7 @@
                     if ([testString length] > 1)
                     {
                         unichar firstChar = [testString characterAtIndex:0];
-                        if (firstChar== 0x0009 || firstChar == 0x0020)      // Horizontal tab, space
+                        if (firstChar == 0x0009 || firstChar == 0x0020)      // Horizontal tab, space
                         {
                             continue;
                         }
@@ -381,7 +381,7 @@
         // Used below to record how far we've parsed the comment
         long currentFullCommentIndex = -1;
         
-        // First, get the keyword. (Either @import or a variable name)
+        // First, get the keyword. (Either @import/@include or a variable name)
         unichar keywordBuffer[fullCommentLength + 1];
         long keywordIndex = 0;
         BOOL keywordStarted = NO;
