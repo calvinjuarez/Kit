@@ -276,6 +276,7 @@
                 unichar keyChar = [compString characterAtIndex:4];
                 unichar peekChar = [compString characterAtIndex:5];
                 isSpecialComment = ((keyChar == 0x0024 || keyChar == 0x0040) && ((peekChar > 0x004d && peekChar < 0x005b) || (peekChar > 0x0060 && peekChar < 0x007b))) ? YES : NO;
+                //! COMMENT: Will need to add ! (0x0021) as possibility for peekChar
             }
             
             // Test comments WITH spaces: <!-- @import someFile.html -->, <!-- $someVar = value-->, etc.
@@ -669,6 +670,8 @@
             }
             else
             {
+                //! COMMENT: Might could live here. Just check whether the keyword is "[@$]!", and if so, don't do anything; Just continue or whatever.
+                
                 // We have a variable
                 if (predicate)
                 {
