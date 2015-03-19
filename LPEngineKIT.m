@@ -553,6 +553,23 @@
                     NSFileManager *fm = [NSFileManager defaultManager];
                     NSArray *frameworkFolders = [_rootCompiler allPossibleFoldersForImportedFrameworkFiles];
                     
+                    //!
+                    //! FILE GLOBBING: The file globbing logic would go here in a `for` loop like the one below
+                    //! i.e. `for (NSString *importString in imports) { if (!isFile && isDir) {...(open dir and add each file to imports)...} }`
+                    //! Or it could live in the same loop as below.  That's something I'll definitely have to think about.
+                    //! With everything below, though, we'll probably want to extract the directories to `imports` up front, then just let them run through, though that's doubling the reccursion...
+                    //!
+                    //! If '*' method:
+                    //!     1. Split on '*'.
+                    //!     2. Figure out path up to the last '/' before the first '*', and save it. $topPath
+                    //!     3. Store the '*' pattern from the '/' from [2] to the next '/', if any. $starPath[0]
+                    //!     4. ...
+                    //! If flat dir method:
+                    //!     1. Search for dir. (If ! dir, error.)
+                    //!     2. In dir, get each filename. (SOMEHOW)
+                    //!     3. For each file, do this same for loop.
+                    //!
+                    
                     for (NSString *importString in imports)
                     {
                         BOOL fileFound = NO;
@@ -586,6 +603,7 @@
                             fullImportFilePath = [rootPath stringByAppendingPathComponent:filename2];
                             fileFound = YES;
                         }
+                        //! FILE GLOBBING: Might could live here, as `else if(...(importString is a valid path to a dir)...)` (flat dir method)
                         else
                         {
                             // Neither "file.kit" nor "_file.kit" were in the specified locations. Check Frameworks, starting with the
@@ -599,6 +617,7 @@
                                     fileFound = YES;
                                     break;
                                 }
+                                //! FILE GLOBBING: add a framework check for the dir? (flat dir method)
                             }
                             
                             if (!fileFound)
@@ -614,9 +633,13 @@
                                         break;
                                     }
                                 }
+                                //! FILE GLOBBING: add a last resort check for the dir? (flat dir method)
                             }
                         }
                         
+                        //! FILE GLOBBING: Might could live here entirely. Just `if (!fileFound) {...(run through this project, then each framework, then err'where for the dir)...}`
+                        
+                        //! FILE GLOBBING: We may want to check that some file was actually imported. If not, maybe we could Warn? IDK if there's a simple way to do it from here.
                         
                         if (!fileFound)
                         {
